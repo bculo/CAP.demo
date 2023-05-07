@@ -3,10 +3,26 @@
 services:
 
   rabbitmq:
+    container_name: 'rabbit'
     image: 'rabbitmq:3.11.15-management-alpine'
     environment:
-      - RABBITMQ_DEFAULT_USER=user
-      - RABBITMQ_DEFAULT_PASS=pass
+      - 'RABBITMQ_DEFAULT_USER=user'
+      - 'RABBITMQ_DEFAULT_PASS=pass'
     ports:
       - '5672:5672'
       - '15672:15672'
+    
+  kafka:
+    container_name: 'kafka'
+    image: 'bitnami/kafka:3.4.0'
+    hostname: 'localhost'
+    volumes:
+      - 'kafkavolume:/bitnami/kafka'
+    ports:
+      - '9092:9092'
+    environment:
+      - 'ALLOW_PLAINTEXT_LISTENER=yes'
+  
+volumes:
+  kafkavolume:
+  zookeepervolume:
