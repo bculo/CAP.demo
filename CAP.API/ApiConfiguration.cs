@@ -1,3 +1,5 @@
+using Amazon;
+using Amazon.Runtime;
 using CAP.Application.Consumers;
 using Savorboard.CAP.InMemoryMessageQueue;
 
@@ -19,6 +21,9 @@ public static class ApiConfiguration
                 break;
             case CapTransportType.Kafka:
                 services.ConfigureKafkaTransport(configuration);
+                break;
+            case CapTransportType.AmazonSQS:
+                services.ConfigureAmazonSQSTransport(configuration);
                 break;
             default:
                 throw new NotSupportedException("Message broker not supported");
@@ -64,6 +69,21 @@ public static class ApiConfiguration
             x.UseDashboard();
         });
     }
+    
+    private static void ConfigureAmazonSQSTransport(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddCap(x =>
+        {
+            x.UseAmazonSQS(options =>
+            {
+                options.SNSServiceUrl = "http://localhost:4566/";
+                options.SQSServiceUrl = "http://localhost:4566/";
+            });
+            
+            x.UseInMemoryStorage();
+            x.UseDashboard();
+        });
+    }
 }
 
 public enum CapTransportType
@@ -71,4 +91,5 @@ public enum CapTransportType
     InMemory = 0,
     RabbitMQ = 1,
     Kafka = 2,
+    AmazonSQS = 3
 }

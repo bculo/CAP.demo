@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="DotNetCore.CAP" Version="6.2.1" />
+    <PackageReference Include="DotNetCore.CAP.AmazonSQS" Version="6.2.1" />
     <PackageReference Include="DotNetCore.CAP.InMemoryStorage" Version="6.2.1" />
     <PackageReference Include="DotNetCore.CAP.Kafka" Version="6.2.1" />
     <PackageReference Include="Savorboard.CAP.InMemoryMessageQueue" Version="6.0.0" />
