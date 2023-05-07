@@ -1,0 +1,45 @@
+DEBUG AND VIEW KAFKA TOPICS AND MESSAGES
+
+1. Open powershell and run -> docker exec -it kafka bin/bash
+
+2. Navigate to -> cd opt/bitnami/kafka/bin/ (kafka scripts location)
+
+3. To view all kafka server topics execute -> kafka-topics.sh --bootstrap-server localhost:9092 --list
+
+Executed command result:
+__consumer_offsets
+order.received
+
+NOTE: Displayed topic list should contain topic with name 'order.received' if message is produced via CAP.API application
+
+4. To view produced messages execute -> kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic order.received --from-beginning --max-messages 10
+
+Executed command result:
+{"Text":"string"}
+{"Text":"string"}
+{"Text":"string"}
+{"Text":"HELLO WORLD"}
+{"Text":"HELLO WORLD"}
+{"Text":"HELLO WORLD"}
+{"Text":"string"}
+{"Text":"string"}
+{"Text":"string"}
+{"Text":"string"}
+
+5. View all consumer groups -> kafka-consumer-groups.sh  --list --bootstrap-server localhost:9092
+
+Executed command result:
+ServiceGroup.v1
+console-consumer-47757
+ControllerGroup.v1
+
+
+And for more details execute -> kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --all-groups
+
+Executed command result:
+GROUP              TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                  HOST            CLIENT-ID
+ControllerGroup.v1 order.received  0          24              24              0               rdkafka-e50fe1a6-3963-4b54-b838-b5af7d823150 /192.168.112.1  rdkafka
+
+GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                  HOST            CLIENT-ID
+ServiceGroup.v1 order.received  0          24              24              0               rdkafka-1c58a21b-49a9-488e-ac37-f276ece20c57 /192.168.112.1  rdkafka
+
