@@ -25,6 +25,9 @@ public static class ApiConfiguration
             case CapTransportType.AmazonSQS:
                 services.ConfigureAmazonSQSTransport(configuration);
                 break;
+            case CapTransportType.NATS:
+                services.ConfigureNATSJetStreamTransport(configuration);
+                break;
             default:
                 throw new NotSupportedException("Message broker not supported");
         }
@@ -84,6 +87,17 @@ public static class ApiConfiguration
             x.UseDashboard();
         });
     }
+    
+    private static void ConfigureNATSJetStreamTransport(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddCap(x =>
+        {
+            x.UseNATS("nats://localhost:4222");
+            
+            x.UseInMemoryStorage();
+            x.UseDashboard();
+        });
+    }
 }
 
 public enum CapTransportType
@@ -91,5 +105,6 @@ public enum CapTransportType
     InMemory = 0,
     RabbitMQ = 1,
     Kafka = 2,
-    AmazonSQS = 3
+    AmazonSQS = 3,
+    NATS = 4
 }

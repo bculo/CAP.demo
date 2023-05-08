@@ -25,16 +25,33 @@ services:
       - 'ALLOW_PLAINTEXT_LISTENER=yes'
   
   localstack:
-    container_name: "localstack"
+    container_name: 'localstack'
     image: 'localstack/localstack:2.0'
     ports:
-      - "4566:4566"            
-      - "4510-4559:4510-4559"  
+      - '4566:4566'            
+      - '4510-4559:4510-4559'  
     environment:
       - 'DEBUG=1'
     volumes:
-      - "D:/Applications/CAP/localstack:/var/lib/localstack"
+      - 'D:/Applications/CAP/localstack:/var/lib/localstack'
 
+  nats:
+    container_name: 'nats'
+    image: 'nats:2.9-alpine'
+    command:
+      - '--js'
+    ports:
+      - '4222:4222'
+      - '8222:8222'
+      - '6222:6222'
+    networks:
+      - 'natsnetwork'
+    volumes:
+      - 'D:/Applications/CAP/nats:/tmp/nats/jetstream'
+    
 volumes:
   kafkavolume:
   zookeepervolume:
+    
+networks:
+  natsnetwork:
