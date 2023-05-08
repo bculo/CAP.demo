@@ -32,11 +32,9 @@ services:
       - "4510-4559:4510-4559"  
     environment:
       - 'DEBUG=1'
-      - 'AWS_DEFAULT_REGION=eu-central-1'
     volumes:
-      - "localstackvolume:/var/lib/localstack"
+      - "D:/Applications/CAP/localstack:/var/lib/localstack"
 
 volumes:
   kafkavolume:
   zookeepervolume:
-  localstackvolume:

@@ -1,0 +1,59 @@
+This project uses localstack docker image (free version) to run AWS services locally 
+For more information check https://hub.docker.com/r/localstack/localstack and https://docs.localstack.cloud/references/configuration/
+
+1. To test AmazonSQS and AmazonSNS spin up docker localstack image using -> docker-compose --f docker-compose.yml up -d (located in current project repo)
+
+2. If container is running (docker ps command in powershell) check avaiable AWS services on http://localhost:4566/health. AmazonSQS and AmazonSNS should be in given JSON response
+
+3. Start application with appsettings defiend with CapOptions:TransportType 3 to use AmazonSQS and AmazonSNS. AmazonSNS supports publish subscribe pattern and its required in combination with AmazonSQS to use CAP dotnetcore abstraction.
+
+NOTE: Because CAP works based on the topic pattern, it needs to use AWS SNS, which simplifies the publish and subscribe architecture of messages.
+
+4. To access docker localstack image execute command docker exec -it localstack /bin/bash
+
+5. Run command 'awslocal sqs list-queues' to list all created message queues
+
+Executed command result
+{
+    "QueueUrls": [
+        "http://localhost:4566/000000000000/ControllerGroup-v1",
+        "http://localhost:4566/000000000000/ServiceGroup-v1"
+    ]
+}
+
+6 Run command 'awslocal sqs list-topics' to list all created topics
+
+Executed command result
+{
+    "Topics": [
+        {
+            "TopicArn": "arn:aws:sns:us-east-1:000000000000:order-received"
+        }
+    ]
+}
+
+7 Run command 'awslocal sqs list-subscriptions' to list all subscriptions
+
+Executed command result
+{
+    "Subscriptions": [
+        {
+            "SubscriptionArn": "arn:aws:sns:us-east-1:000000000000:order-received:e0fe8de3-abbc-4e62-8bca-b5caff2281f7",
+            "Owner": "000000000000",
+            "Protocol": "sqs",
+            "Endpoint": "arn:aws:sqs:us-east-1:000000000000:ControllerGroup-v1",
+            "TopicArn": "arn:aws:sns:us-east-1:000000000000:order-received"
+        },
+        {
+            "SubscriptionArn": "arn:aws:sns:us-east-1:000000000000:order-received:b7cdf9d9-6d6b-4728-9cf9-4569c8aee9e1",
+            "Owner": "000000000000",
+            "Protocol": "sqs",
+            "Endpoint": "arn:aws:sqs:us-east-1:000000000000:ServiceGroup-v1",
+            "TopicArn": "arn:aws:sns:us-east-1:000000000000:order-received"
+        }
+    ]
+}
+
+In this result we can see connection between endpoint and topic
+
+
